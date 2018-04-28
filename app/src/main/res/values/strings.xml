@@ -1,0 +1,6 @@
+<resources>
+    <string name="app_name">Photos Server MySQL</string>
+
+    <string name="btnTakePicture">Take Photo</string>
+    <string name="btnUploadToServer">Upload to Server</string>
+</resources>
