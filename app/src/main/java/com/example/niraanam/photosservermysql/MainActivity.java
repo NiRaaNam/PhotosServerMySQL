@@ -142,6 +142,19 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
             // will close the app if the device does't have camera
             finish();
         }
+
+        Button DB_list = (Button) findViewById(R.id.DB_list);
+        DB_list.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                Intent ii = new Intent(MainActivity.this, Table_ShowAllList.class);
+
+                startActivity(ii);
+            }
+        });
+
+
     }
 
     public void GOTOAlert(){

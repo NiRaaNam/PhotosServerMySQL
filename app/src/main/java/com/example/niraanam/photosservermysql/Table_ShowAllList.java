@@ -1,5 +1,6 @@
 package com.example.niraanam.photosservermysql;
 
+import android.app.ProgressDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
@@ -58,7 +59,7 @@ public class Table_ShowAllList extends AppCompatActivity {
 
         progressBar = (ProgressBar)findViewById(R.id.progressBar_table);
 
-        new GetHttpResponse(Table_ShowAllList.this).execute();
+        isInternetOn();
 
         //Adding ListView Item click Listener.
         TableListView.setOnItemClickListener(new AdapterView.OnItemClickListener()
@@ -79,6 +80,60 @@ public class Table_ShowAllList extends AppCompatActivity {
 
             }
         });
+    }
+
+    public final  boolean isInternetOn() {
+
+        if(isInternetAvailable()== true){
+
+            new GetHttpResponse(Table_ShowAllList.this).execute();
+
+        }else{
+
+            Toast.makeText(getApplicationContext(), " No Internet Connection!!! ", Toast.LENGTH_LONG).show();
+
+            progressBar.setVisibility(View.GONE);
+            AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(Table_ShowAllList.this);
+            alertDialogBuilder.setTitle("Warning!!!");
+            alertDialogBuilder.setMessage("You have no Internet connection, Please check for retrieving data from Database Server");
+
+            alertDialogBuilder.setPositiveButton("Retry", new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int id) {
+
+                    Intent intent = new Intent(Table_ShowAllList.this, Table_ShowAllList.class);
+                    startActivity(intent);
+                    finish();
+
+                }
+            });
+            // set negative button: No message
+            alertDialogBuilder.setNegativeButton("Exit the app", new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int id) {
+
+                    Table_ShowAllList.this.finish();
+
+                }
+            });
+
+            AlertDialog alertDialog = alertDialogBuilder.create();
+            // show alert
+            alertDialog.show();
+
+        }
+        return false;
+    }
+
+    public boolean isInternetAvailable() {
+        try {
+            Process p1 = Runtime.getRuntime().exec("ping -c 1 www.google.com");
+            int returnVal = p1.waitFor();
+            boolean reachable = (returnVal==0);
+            return reachable;
+        } catch (Exception e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        return false;
     }
 
 
