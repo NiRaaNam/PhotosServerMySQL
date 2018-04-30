@@ -6,14 +6,26 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
+import android.os.StrictMode;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
+import com.google.android.gms.maps.CameraUpdate;
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.MapView;
+import com.google.android.gms.maps.MapsInitializer;
+import com.google.android.gms.maps.model.LatLng;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -22,7 +34,13 @@ import java.io.InputStream;
 import java.net.URL;
 import java.util.HashMap;
 
-public class Table_ShowSingle extends AppCompatActivity {
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
+
+public class Table_ShowSingle extends AppCompatActivity implements OnMapReadyCallback{
 
     HttpParse httpParse = new HttpParse();
     ProgressDialog pDialog;
@@ -49,6 +67,14 @@ public class Table_ShowSingle extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.table_showsingle);
 
+
+
+        //*** Permission StrictMode
+        if (android.os.Build.VERSION.SDK_INT > 9) {
+            StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+            StrictMode.setThreadPolicy(policy);
+        }
+
         AziVal = (TextView) findViewById(R.id.txtAzimuth);
         LatVal = (TextView)findViewById(R.id.txtLatitude);
         LonVal = (TextView)findViewById(R.id.txtLongitude);
@@ -64,6 +90,7 @@ public class Table_ShowSingle extends AppCompatActivity {
         HttpWebCall(TempItem);
 
     }
+
 
     //Method to show current record Current Selected Record
     public void HttpWebCall(final String PreviousListViewClickedItem){
@@ -176,6 +203,10 @@ public class Table_ShowSingle extends AppCompatActivity {
             new DownloadImageFromInternet((ImageView) findViewById(R.id.imageView))
                     .execute(Value5Holder);
 
+            SupportMapFragment mapFragment =
+                    (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
+            mapFragment.getMapAsync(Table_ShowSingle.this);
+
             // Setting Student Name, Phone Number, Class into TextView after done all process .
             AziVal.setText(Value3Holder);
             LatVal.setText(Value1Holder);
@@ -216,7 +247,45 @@ public class Table_ShowSingle extends AppCompatActivity {
         }
     }
 
+    @Override
+    public void onMapReady(GoogleMap map) {
 
 
+        boolean isDouble = isDouble(Value1Holder,Value2Holder);
+        if (isDouble) {
 
+            double thelat = Double.parseDouble(Value1Holder);
+            double thelon = Double.parseDouble(Value2Holder);
+
+            map.addMarker(new MarkerOptions().position(new LatLng(thelat, thelon)).title(Value4Holder));
+            map.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(thelat,thelon), 12.0f));
+
+        } else {
+
+            map.addMarker(new MarkerOptions().position(new LatLng(0, 0)).title("Failure Location from Database"));
+            map.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(0,0), 12.0f));
+            Toast.makeText(getApplicationContext(),"Failure Location from Databas", Toast.LENGTH_LONG).show();
+
+        }
+
+    }
+
+    public boolean isDouble(String x,String y) {
+        boolean isValidDouble = false;
+        try
+        {
+            Double.parseDouble(x);
+            Double.parseDouble(y);
+
+            // x y is a valid double
+
+            isValidDouble = true;
+        }
+        catch (NumberFormatException ex)
+        {
+            // x y is not an double
+        }
+
+        return isValidDouble;
+    }
 }
