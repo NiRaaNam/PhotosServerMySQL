@@ -176,6 +176,23 @@ public class UploadActivity extends AppCompatActivity {
             String attrLONGITUDE = exif.getAttribute(ExifInterface.TAG_GPS_LONGITUDE);
             String attrLONGITUDE_REF = exif.getAttribute(ExifInterface.TAG_GPS_LONGITUDE_REF);
 
+            //exif.setAttribute(ExifInterface.TAG_GPS_IMG_DIRECTION, Azimuth);
+            //exif.readExif(exifVar.getAbsolutePath());
+            //exif.setTagValue(ExifInterface.TAG_USER_COMMENT, mString);
+            try{
+
+                //exif.setAttribute(ExifInterface.TAG_USER_COMMENT,Azimuth);
+                String theazimuth = "Azimuth: "+Azimuth;
+                exif.setAttribute(ExifInterface.TAG_IMAGE_DESCRIPTION,theazimuth);
+                exif.setAttribute(ExifInterface.TAG_COPYRIGHT,"GISTDA (Public Organization)");
+                exif.saveAttributes();
+
+
+            }catch (IOException e){
+                e.printStackTrace();
+            }
+
+
             if((attrLATITUDE !=null)
                     && (attrLATITUDE_REF !=null)
                     && (attrLONGITUDE != null)

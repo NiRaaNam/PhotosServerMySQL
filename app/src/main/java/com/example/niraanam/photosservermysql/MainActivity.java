@@ -94,8 +94,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         }*/
 
         ActivityCompat.requestPermissions(MainActivity.this,
-                new String[]{Manifest.permission.READ_EXTERNAL_STORAGE,Manifest.permission.CAMERA,Manifest.permission.ACCESS_FINE_LOCATION,
-                        Manifest.permission.RECORD_AUDIO},
+                new String[]{Manifest.permission.READ_EXTERNAL_STORAGE,Manifest.permission.WRITE_EXTERNAL_STORAGE,Manifest.permission.CAMERA,Manifest.permission.ACCESS_FINE_LOCATION},
                 1);
 
         context = getApplicationContext();
@@ -203,7 +202,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
 
                     // permission denied, boo! Disable the
                     // functionality that depends on this permission.
-                    Toast.makeText(MainActivity.this, "Permission denied to read your External storage", Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(MainActivity.this, "Permission denied to read your External storage", Toast.LENGTH_SHORT).show();
                 }
                 return;
             }

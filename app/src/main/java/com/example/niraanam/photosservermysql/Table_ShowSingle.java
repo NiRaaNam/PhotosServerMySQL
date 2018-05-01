@@ -14,6 +14,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -200,8 +201,28 @@ public class Table_ShowSingle extends AppCompatActivity implements OnMapReadyCal
         {
 
             //new DownLoadImageTask(imgView).execute(Value5Holder);
+
+            /*ImageButton   tran_btn_skip = (ImageButton) findViewById(R.id.imageButton);
+            //ImageView   tran_btn_skip = (ImageView) findViewById(R.id.imageView);
+
+            try {
+
+                String FullName = String.valueOf(Value5Holder);
+                String[] separated = FullName.split(" ");
+                String thelink = separated[0]+"%20"+separated[1];
+                //String thelink = Value5Holder;
+                Bitmap bitmap = BitmapFactory.decodeStream((InputStream) new URL(thelink)
+                        .getContent());
+                tran_btn_skip.setImageBitmap(bitmap);
+            } catch (Exception e) {
+            }*/
+
+            String FullName = String.valueOf(Value5Holder);
+            String[] separated = FullName.split(" ");
+            String thelink = separated[0]+"%20"+separated[1];
+
             new DownloadImageFromInternet((ImageView) findViewById(R.id.imageView))
-                    .execute(Value5Holder);
+                    .execute(thelink);
 
             SupportMapFragment mapFragment =
                     (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
@@ -257,7 +278,7 @@ public class Table_ShowSingle extends AppCompatActivity implements OnMapReadyCal
             double thelat = Double.parseDouble(Value1Holder);
             double thelon = Double.parseDouble(Value2Holder);
 
-            map.addMarker(new MarkerOptions().position(new LatLng(thelat, thelon)).title(Value4Holder));
+            map.addMarker(new MarkerOptions().position(new LatLng(thelat, thelon)).title(Value5Holder));
             map.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(thelat,thelon), 12.0f));
 
         } else {
