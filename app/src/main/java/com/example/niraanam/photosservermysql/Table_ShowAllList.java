@@ -78,11 +78,10 @@ public class Table_ShowAllList extends AppCompatActivity {
             StrictMode.setThreadPolicy(policy);
         }
 
-        more= (Button) findViewById(R.id.btnmore);
+        //more= (Button) findViewById(R.id.btnmore);
 
 
-
-        more.setOnClickListener(new View.OnClickListener() {
+        /*more.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
@@ -102,7 +101,7 @@ public class Table_ShowAllList extends AppCompatActivity {
                 //Toast.makeText(getApplicationContext(), "TableListView.smoothScrollToPosition : "+ fixlist, Toast.LENGTH_LONG).show();
 
             }
-        });
+        });*/
 
         TableListView = (ListView)findViewById(R.id.listView_table);
 
@@ -284,15 +283,11 @@ public class Table_ShowAllList extends AppCompatActivity {
 
             TableListView.setAdapter(adapter);
 
-            //fixlist = adapter.getCount()-1;
-
-            //fixlist = fixlist+10;
-
-            fixlist = adapter.getCount();
+            //fixlist = adapter.getCount();
 
             //TableListView.smoothScrollToPosition(fixlist);
 
-            Toast.makeText(getApplicationContext(), "Rows in List : "+ fixlist, Toast.LENGTH_LONG).show();
+            //Toast.makeText(getApplicationContext(), "Rows in List : "+ fixlist, Toast.LENGTH_LONG).show();
 
         }
     }
