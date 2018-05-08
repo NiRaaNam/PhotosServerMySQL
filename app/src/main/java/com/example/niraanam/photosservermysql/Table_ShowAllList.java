@@ -87,7 +87,7 @@ public class Table_ShowAllList extends AppCompatActivity {
             public void onClick(View v) {
 
 
-                TableListView.smoothScrollToPosition(adapter.getCount());
+                //TableListView.smoothScrollToPosition(adapter.getCount());
 
 
 
@@ -288,14 +288,11 @@ public class Table_ShowAllList extends AppCompatActivity {
 
             //fixlist = fixlist+10;
 
-            //TableListView.smoothScrollToPosition(fixlist);
-
-
             fixlist = adapter.getCount();
 
-            TableListView.smoothScrollToPosition(fixlist);
+            //TableListView.smoothScrollToPosition(fixlist);
 
-            Toast.makeText(getApplicationContext(), "TableListView.smoothScrollToPosition : "+ fixlist, Toast.LENGTH_LONG).show();
+            Toast.makeText(getApplicationContext(), "Rows in List : "+ fixlist, Toast.LENGTH_LONG).show();
 
         }
     }
