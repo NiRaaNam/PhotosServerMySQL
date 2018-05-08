@@ -10,6 +10,7 @@
         android:layout_height="wrap_content"
         android:padding="10dp"
         android:text="Time Stamp"
+        android:textColor="#089620"
         android:layout_weight="1.5" />
 
     <TextView

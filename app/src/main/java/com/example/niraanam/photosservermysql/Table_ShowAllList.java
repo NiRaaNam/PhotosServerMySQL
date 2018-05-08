@@ -9,6 +9,7 @@ import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -22,9 +23,25 @@ import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+
+import org.apache.http.HttpEntity;
+import org.apache.http.HttpResponse;
+import org.apache.http.NameValuePair;
+import org.apache.http.StatusLine;
+import org.apache.http.client.ClientProtocolException;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.entity.UrlEncodedFormEntity;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.message.BasicNameValuePair;
 import org.json.JSONArray;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -41,8 +58,14 @@ public class Table_ShowAllList extends AppCompatActivity {
 
     ListView TableListView;
     ProgressBar progressBar;
-    String HttpUrl = "http://150.107.31.104/sql_photo_android/all_sql_table.php";
+    String HttpUrl;
+    int fixlist=0;
+    int add = 20;
     List<String> IdList = new ArrayList<>();
+
+    Table_ListAdapterClass adapter;
+
+    Button more;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,6 +77,32 @@ public class Table_ShowAllList extends AppCompatActivity {
             StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
             StrictMode.setThreadPolicy(policy);
         }
+
+        more= (Button) findViewById(R.id.btnmore);
+
+
+
+        more.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+
+                TableListView.smoothScrollToPosition(adapter.getCount());
+
+
+
+                add = add+20;
+                HttpUrl = "http://150.107.31.104/sql_photo_android/all_sql_table.php?datanumber="+add;
+                //fixlist = fixlist+add;
+
+                new GetHttpResponse(Table_ShowAllList.this).execute();
+
+                //TableListView.smoothScrollToPosition(fixlist);
+
+                //Toast.makeText(getApplicationContext(), "TableListView.smoothScrollToPosition : "+ fixlist, Toast.LENGTH_LONG).show();
+
+            }
+        });
 
         TableListView = (ListView)findViewById(R.id.listView_table);
 
@@ -75,8 +124,7 @@ public class Table_ShowAllList extends AppCompatActivity {
                 intent.putExtra("ListViewValue", IdList.get(position).toString());
 
                 startActivity(intent);
-                //Finishing current activity after open next activity.
-                //finish();
+
 
             }
         });
@@ -86,7 +134,10 @@ public class Table_ShowAllList extends AppCompatActivity {
 
         if(isInternetAvailable()== true){
 
+            HttpUrl = "http://150.107.31.104/sql_photo_android/all_sql_table.php";
+
             new GetHttpResponse(Table_ShowAllList.this).execute();
+
 
         }else{
 
@@ -229,9 +280,22 @@ public class Table_ShowAllList extends AppCompatActivity {
 
             TableListView.setVisibility(View.VISIBLE);
 
-            Table_ListAdapterClass adapter = new Table_ListAdapterClass(numList, context);
+            adapter = new Table_ListAdapterClass(numList, context);
 
             TableListView.setAdapter(adapter);
+
+            //fixlist = adapter.getCount()-1;
+
+            //fixlist = fixlist+10;
+
+            //TableListView.smoothScrollToPosition(fixlist);
+
+
+            fixlist = adapter.getCount();
+
+            TableListView.smoothScrollToPosition(fixlist);
+
+            Toast.makeText(getApplicationContext(), "TableListView.smoothScrollToPosition : "+ fixlist, Toast.LENGTH_LONG).show();
 
         }
     }
